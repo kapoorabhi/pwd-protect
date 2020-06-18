@@ -1,12 +1,12 @@
 <script>
-    export let name;
+    import AppContainer from './containers/AppContainer.svelte';
 </script>
 
 <style>
-    h1 {
+    /* h1 {
         font-family: 'Comic Sans MS';
-    }
+    } */
 </style>
 
-<h1>Hellossssssa {name}</h1>
+<AppContainer />
 

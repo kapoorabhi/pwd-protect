@@ -1,0 +1,26 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Amazon",
+            "password": "am@zon",
+            "url": "https://www.amazon.com",
+            "tags": [
+                "e-commerce",
+                "shopping",
+                "online"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Walmart",
+            "password": "walm@rt",
+            "url": "https://www.walmart.com",
+            "tags": [
+                "e-commerce",
+                "shopping",
+                "online"
+            ]
+        }
+    ]
+}
