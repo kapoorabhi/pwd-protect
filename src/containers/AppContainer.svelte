@@ -1,22 +1,57 @@
 <script>
     import Text from '../components/Text';
     import FormField from '../components/FormField';
+    import Table from '../components/Table';
 
     let name = '';
     let password = '';
     let url = '';
-    let tags = [];
+    let tags = '';
 
-    $: obj = {
+    $: formData = {
         name,
         password,
         url,
-        tags: []
+        tags
     }
 
+    let result = {};
+    let postResponse = {};
+
     const handleSubmit = () => {
-        console.log(obj)
+        console.log(formData);
+        postResponse = submitForm();
+        
     }
+
+
+    const submitForm = async () => {
+        const options = {
+            method: 'post',
+            body: JSON.stringify(formData),
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json;charset=utf-8',
+                "Access-Control-Allow-Origin": "*"
+            }
+        }
+        let response = await fetch('http://localhost/8081/data', options);
+
+        let data = await response.json();
+        console.log(response);
+        // return response.json();
+    }
+
+    const handleClick = () => {
+        result = getData();
+    }
+
+    const getData = async () => {
+        let response = await fetch('http://localhost:8081/data');
+        let data = response.json();
+        return data;
+    }
+
 </script>
 
 <style>
@@ -78,7 +113,27 @@
                 <FormField type="text" placeholder="Enter related tags" bind:value={tags} />
             </div>
             <button on:click|preventDefault={handleSubmit}>Submit</button>
-            {JSON.stringify(obj)}
+            {JSON.stringify(formData)}
+
+                {#await postResponse}
+                    <p>Loading...</p>
+                    {:then value}
+                        {JSON.stringify(value)}
+                    {:catch error}
+                    <p>{error.message}</p>
+                {/await}
         </div>
     </form>
+
+    <button on:click|preventDefault={handleClick}>Get Data</button>
+
+ 
+
+    {#await result}
+        <p>Loading...</p>
+        {:then value}
+            <Table data={value} />
+        {:catch error}
+        <p>{error.message}</p>
+    {/await}
 </div>
