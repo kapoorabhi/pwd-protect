@@ -19,7 +19,6 @@
     let postResponse = {};
 
     const handleSubmit = () => {
-        console.log(formData);
         postResponse = submitForm();
         
     }
@@ -35,11 +34,11 @@
                 "Access-Control-Allow-Origin": "*"
             }
         }
-        let response = await fetch('http://localhost/8081/data', options);
+        let response = await fetch('http://localhost:8081/data', options);
 
-        let data = await response.json();
-        console.log(response);
-        // return response.json();
+        if(response.status === 200 || response.status === 201) {
+            return 'Record Saved Successfully!!';
+        }
     }
 
     const handleClick = () => {
@@ -63,15 +62,25 @@
     }
     .container {
         margin: 0 auto;
-        height: 100vh;
         max-width: 1400px;
         background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        align-items: center;
+        overflow: auto;
+        padding-bottom: 1rem;
+    }
+    .content {
+        display: flex;
+        flex-direction: column;
+        min-width: 650px;
+        align-items: center;
     }
 
     h1 {
         display: flex;
         justify-content: center;
-        border-bottom: 1px solid #e4e4e4;
         padding: 1rem 0.5rem;
         margin: 0;
         text-align: center;
@@ -79,9 +88,10 @@
 
     .form-container {
         display: flex;
-        padding: 4em 1em;
-        justify-content: center;
-        flex-direction: column;   
+        padding: 3em 2em;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #e2e2e2; 
     }
 
     .form-group {
@@ -93,41 +103,38 @@
 </style>
 
 <div class="container">
-    <h1>Welcome to Password protector</h1>
-    <form name="pwd" autocomplete="off">
-        <div class="form-container">
-            <div class="form-group">
-                <Text>Name</Text>
-                <FormField type="text" placeholder="Enter website name" bind:value={name} />
-            </div>
-            <div class="form-group">
-                <Text>Password</Text>
-                <FormField type="password" placeholder="Enter your password" bind:value={password} />
-            </div>
-            <div class="form-group">
-                <Text>URL</Text>
-                <FormField type="text" placeholder="Enter URL" bind:value={url} />
-            </div>
-             <div class="form-group">
-                <Text>Tags</Text>
-                <FormField type="text" placeholder="Enter related tags" bind:value={tags} />
-            </div>
-            <button on:click|preventDefault={handleSubmit}>Submit</button>
-            {JSON.stringify(formData)}
-
+    <div class="content">
+        <h1>Welcome to Password protector</h1>
+        <form name="pwd" autocomplete="off">
+            <div class="form-container">
+                <div class="form-group">
+                    <Text>Name</Text>
+                    <FormField type="text" placeholder="Enter website name" bind:value={name} />
+                        </div>
+                <div class="form-group">
+                    <Text>Password</Text>
+                    <FormField type="password" placeholder="Enter your password" bind:value={password} />
+                </div>
+                <div class="form-group">
+                    <Text>URL</Text>
+                    <FormField type="text" placeholder="Enter URL" bind:value={url} />
+                </div>
+                <div class="form-group">
+                    <Text>Tags</Text>
+                    <FormField type="text" placeholder="Enter related tags" bind:value={tags} />
+                </div>
+                <button on:click|preventDefault={handleSubmit}>Submit</button>
                 {#await postResponse}
-                    <p>Loading...</p>
+                    <p>Saving Records...</p>
                     {:then value}
-                        {JSON.stringify(value)}
+                        {value}
                     {:catch error}
                     <p>{error.message}</p>
                 {/await}
-        </div>
-    </form>
-
-    <button on:click|preventDefault={handleClick}>Get Data</button>
-
- 
+            </div>
+        </form>                     
+        <button on:click|preventDefault={handleClick}>Get Data</button>
+    </div>
 
     {#await result}
         <p>Loading...</p>
